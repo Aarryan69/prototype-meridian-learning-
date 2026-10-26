@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meridian Learning — CAT Readiness & Learner Identity</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ==========================================================================
+       PROTOTYPE CONTROLLER BAR (Device Switcher & Case Tools)
+       ========================================================================== -->
+  <header class="prototype-controller">
+    <div class="controller-brand">
+      <span class="controller-logo-badge">MERIDIAN</span>
+      <span class="controller-title">CAT Readiness & Learner Identity</span>
+      <span class="controller-case-tag">Ace the Case 2026 • Summit × AceMBA</span>
+    </div>
+
+    <!-- Device Viewport Switcher -->
+    <div class="device-switcher-group">
+      <button class="device-btn active" id="btnModeDesktop" onclick="setViewportMode('desktop')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        Desktop View
+      </button>
+      <button class="device-btn" id="btnModeIos" onclick="setViewportMode('phone-ios')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="3"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        📱 iPhone 16 Frame
+      </button>
+      <button class="device-btn" id="btnModeAndroid" onclick="setViewportMode('phone-android')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="18" r="1"/></svg>
+        Android Frame
+      </button>
+    </div>
+
+    <!-- Action Tools -->
+    <div class="controller-actions">
+      <button class="ctrl-btn" id="btnScaleToggle" onclick="toggleScale()" title="Toggle Phone Scale">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+        <span id="scaleLabel">Scale 100%</span>
+      </button>
+      <button class="ctrl-btn" onclick="toggleCaseDrawer()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        Case Evidence Map
+      </button>
+      <button class="ctrl-btn" onclick="resetPrototypeState()" title="Reset to initial state">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        Reset
+      </button>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       VIEWPORT STAGE (Switches smoothly between Desktop & Phone Simulator)
+       ========================================================================== -->
+  <main class="viewport-stage mode-desktop" id="viewportStage">
+
+    <!-- DESKTOP CONTAINER (Used when in Desktop Mode) -->
+    <div class="app-frame" id="desktopAppContainer">
+      <!-- The inner core app content gets injected or cloned here via JS -->
+      <div class="app-core-shell" id="appCoreContent">
+
+        <!-- App Brand Header -->
+        <header class="app-header">
+          <div class="app-brand-lockup">
+            <div class="meridian-emblem">M</div>
+            <div class="brand-title-wrap">
+              <div class="brand-name">
+                MERIDIAN
+                <span class="brand-badge">CAT READINESS</span>
+              </div>
+              <div class="brand-subtext">Mock-to-Next-Action Learning System</div>
+            </div>
+          </div>
+
+          <!-- Persona Preset Switcher -->
+          <div class="persona-selector-wrap">
+            <span class="persona-label">Interview Persona:</span>
+            <select class="persona-select" id="personaSelect" onchange="switchPersona(this.value)">
+              <option value="harshit">Harshit (Q-04: Quant Timed Gap)</option>
+              <option value="pulkit">Pulkit (Q-01: DILR Speed & Selection)</option>
+              <option value="vedtrayee">Vedtrayee (Q-03: VARC Distractor Trap)</option>
+              <option value="custom">Custom Aspirant Profile</option>
+            </select>
+          </div>
+        </header>
+
+        <!-- 6-Screen Stepper Navigation -->
+        <nav class="stepper-nav" aria-label="Progress Stepper">
+          <button class="step-item active" id="stepBtn1" onclick="navigateToScreen(1)">
+            <span class="step-number">1</span> Quick Intake
+          </button>
+          <div class="step-divider"></div>
+          <button class="step-item" id="stepBtn2" onclick="navigateToScreen(2)">
+            <span class="step-number">2</span> Micro-Diagnostic
+          </button>
+          <div class="step-divider"></div>
+          <button class="step-item" id="stepBtn3" onclick="navigateToScreen(3)">
+            <span class="step-number">3</span> Error Reflection
+          </button>
+          <div class="step-divider"></div>
+          <button class="step-item" id="stepBtn4" onclick="navigateToScreen(4)">
+            <span class="step-number">4</span> Readiness Signals
+          </button>
+          <div class="step-divider"></div>
+          <button class="step-item" id="stepBtn5" onclick="navigateToScreen(5)">
+            <span class="step-number">5</span> Next Best Drill
+          </button>
+          <div class="step-divider"></div>
+          <button class="step-item" id="stepBtn6" onclick="navigateToScreen(6)">
+            <span class="step-number">6</span> Identity & History
+          </button>
+        </nav>
+
+        <!-- Main Screen Body Area -->
+        <div class="screen-container">
+
+          <!-- ================================================================
+               SCREEN 1: QUICK INTAKE & PROFILE (60-90s Flow)
+               ================================================================ -->
+          <section class="screen active-screen" id="screen1">
+            <div class="screen-header-block">
+              <span class="case-badge-pill highlight">Section 06 Blueprint • Progressive Intake</span>
+              <h1 class="screen-headline">Targeted CAT Intake</h1>
+              <p class="screen-subtext">Pinpoint your friction in 60 seconds. No bloated 10-page forms—we only ask what directly shapes your next drill.</p>
+            </div>
+
+            <!-- Dynamic Persona Callout (Verbatim quote from Workbook) -->
+            <div class="user-quote-callout" id="personaQuoteBox">
+              <div class="quote-icon">“</div>
+              <div class="quote-content">
+                <p class="quote-verbatim" id="personaQuoteText">
+                  Whenever I solve questions from coaching materials I solve most on my own without referring to solutions... but in mocks I get only 4 correct (6-10 marks). Where does the problem stand?
+                </p>
+                <div class="quote-author" id="personaQuoteAuthor">
+                  — Harshit Verma (B.Tech Final Year, Delhi • Linked to Statement Q-04)
+                </div>
+              </div>
+            </div>
+
+            <div class="intake-grid">
+              <!-- Situation Card -->
+              <div class="form-group-card">
+                <div class="field-label-wrap">
+                  <label class="field-label">Current Aspirant Context</label>
+                  <span class="field-hint">Shapes time constraints</span>
+                </div>
+                <div class="choice-pills-row" id="situationPills">
+                  <button class="choice-pill-btn selected" onclick="selectPill(this, 'situation')">College Final Year (B.Tech)</button>
+                  <button class="choice-pill-btn" onclick="selectPill(this, 'situation')">Working Professional</button>
+                  <button class="choice-pill-btn" onclick="selectPill(this, 'situation')">Parallel MBA Student</button>
+                  <button class="choice-pill-btn" onclick="selectPill(this, 'situation')">Full-Time CAT Retaker</button>
+                </div>
+              </div>
+
+              <!-- Primary Friction / Pain Selection -->
+              <div class="form-group-card">
+                <div class="field-label-wrap">
+                  <label class="field-label">Where is your biggest practice–mock gap right now?</label>
+                  <span class="field-hint">Select your core friction</span>
+                </div>
+                <div class="friction-cards-grid">
+                  <div class="friction-card selected" id="painCardQA" onclick="selectFriction('qa_timed_gap')">
+                    <div class="friction-card-title">
+                      <span>Quant Timed Performance Gap</span>
+                      <span class="case-badge-pill">Q-04</span>
+                    </div>
+                    <p class="friction-card-desc">Can solve questions untimed, but in timed mocks collapse to 4-5 correct questions.</p>
+                  </div>
+                  <div class="friction-card" id="painCardDILR" onclick="selectFriction('dilr_selection')">
+                    <div class="friction-card-title">
+                      <span>DILR Speed & Set Triage</span>
+                      <span class="case-badge-pill">Q-01</span>
+                    </div>
+                    <p class="friction-card-desc">Solve sets independently at home, but struggle with set abandonment & clock in mocks (12-20 marks).</p>
+                  </div>
+                  <div class="friction-card" id="painCardVARC" onclick="selectFriction('varc_distractors')">
+                    <div class="friction-card-title">
+                      <span>VARC Trap & Distractor Options</span>
+                      <span class="case-badge-pill">Q-02 / Q-03</span>
+                    </div>
+                    <p class="friction-card-desc">Understand the passage text, but consistently mark the wrong option between the final two choices.</p>
+                  </div>
+                  <div class="friction-card" id="painCardExec" onclick="selectFriction('exec_fatigue')">
+                    <div class="friction-card-title">
+                      <span>Mock Analysis Fatigue</span>
+                      <span class="case-badge-pill">Cross-Section</span>
+                    </div>
+                    <p class="friction-card-desc">Spending 3 hours reviewing PDFs without knowing the exact 10-minute micro-drill to solve tomorrow.</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Time Budget Today -->
+              <div class="form-group-card">
+                <div class="field-label-wrap">
+                  <label class="field-label">How much time can you realistically practise right now?</label>
+                  <span class="field-hint">Filters drill duration</span>
+                </div>
+                <div class="choice-pills-row" id="timeBudgetPills">
+                  <button class="choice-pill-btn" onclick="selectPill(this, 'time')">⚡ 10 mins (Micro-drill)</button>
+                  <button class="choice-pill-btn selected" onclick="selectPill(this, 'time')">⏱️ 20 mins (Standard loop)</button>
+                  <button class="choice-pill-btn" onclick="selectPill(this, 'time')">⏳ 35 mins (Deep diagnostic)</button>
+                </div>
+              </div>
+
+              <!-- Optional Deeper Profile Drawer -->
+              <div class="deeper-profile-box">
+                <div class="deeper-toggle-header" onclick="toggleDeeperProfile()">
+                  <div class="deeper-title">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    Optional Deeper Context (Mock Provider, GMAT/GRE Exposure)
+                  </div>
+                  <span id="deeperToggleIcon">▼</span>
+                </div>
+                <div class="deeper-content" id="deeperProfileContent">
+                  <div>
+                    <label class="field-label" style="font-size: 11px;">Primary Mock Test Series</label>
+                    <input type="text" class="form-input-sm" id="mockProviderInput" value="Career Launcher (CDC) / IMS SimCAT" placeholder="e.g. IMS SimCAT, Cracku">
+                  </div>
+                  <div>
+                    <label class="field-label" style="font-size: 11px;">Past Exam Background</label>
+                    <input type="text" class="form-input-sm" id="pastExamsInput" value="Targeting GMAT alongside CAT" placeholder="e.g. First-time CAT, GMAT, GRE">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Footer Action -->
+            <div class="screen-action-footer">
+              <span style="font-size: 12px; color: var(--text-muted);">Zero login barrier • 100% private session</span>
+              <button class="btn-primary" onclick="startDiagnosticFromIntake()">
+                Begin 5-Minute Micro-Diagnostic
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </button>
+            </div>
+          </section>
+
+          <!-- ================================================================
+               SCREEN 2: TIMED CAT MICRO-DIAGNOSTIC
+               ================================================================ -->
+          <section class="screen" id="screen2">
+            <!-- Diagnostic Control Bar -->
+            <div class="diagnostic-top-bar">
+              <div class="diag-meta-info">
+                <span class="section-tag" id="diagSectionTag">QA</span>
+                <span class="diag-title-text" id="diagTitleText">Time-Triage & Trap-Identification Sprint</span>
+              </div>
+              <div class="diag-timer-box">
+                <span class="timer-label">Time Remaining</span>
+                <span class="timer-clock" id="diagTimer">04:48</span>
+              </div>
+            </div>
+
+            <!-- Diagnostic Split Content -->
+            <div class="diag-split-layout">
+              <!-- Reading / Scenario Column -->
+              <div class="diag-reading-pane" id="diagPassagePane">
+                <div class="reading-passage-text" id="diagPassageContent">
+                  <!-- Injected via JavaScript -->
+                </div>
+              </div>
+
+              <!-- Question & Options Column -->
+              <div class="diag-question-pane">
+                <div class="question-prompt-header">
+                  <span class="q-type-badge" id="qTypeBadge">Question 1 of 2</span>
+                  <span style="font-size: 11px; color: var(--text-muted);" id="qMarksBadge">+3 / -1 Scoring</span>
+                </div>
+                <h3 class="q-prompt-stem" id="qPromptStem">
+                  Loading problem stem...
+                </h3>
+
+                <div class="options-list" id="diagOptionsList">
+                  <!-- Injected via JS -->
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 14px;">
+                  <button class="btn-ghost" onclick="clearOptionSelection()" style="font-size: 11px;">Clear Choice</button>
+                  <div style="display: flex; gap: 8px;">
+                    <button class="btn-secondary" id="btnPrevQ" onclick="prevQuestion()" style="font-size: 12px; display: none;">Previous</button>
+                    <button class="btn-primary" id="btnNextOrSubmitQ" onclick="nextOrSubmitQuestion()">Next Question →</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bottom Navigation -->
+            <div class="screen-action-footer">
+              <button class="btn-secondary" onclick="navigateToScreen(1)">← Back to Intake</button>
+              <span style="font-size: 11px; color: var(--text-muted);">Timed diagnostic tests decision behavior under clock pressure</span>
+              <button class="btn-primary" onclick="submitDiagnostic()">Submit Diagnostic & Analyse →</button>
+            </div>
+          </section>
+
+          <!-- ================================================================
+               SCREEN 3: ERROR ATTRIBUTION & COGNITIVE POST-MORTEM
+               ================================================================ -->
+          <section class="screen" id="screen3">
+            <div class="screen-header-block">
+              <span class="case-badge-pill highlight">Section 03 & 07 • Decision Hierarchy</span>
+              <h1 class="screen-headline">Cognitive Error Post-Mortem</h1>
+              <p class="screen-subtext">The missing bridge: Translating an incorrect attempt into a diagnosed decision flaw.</p>
+            </div>
+
+            <div class="postmortem-container">
+              <!-- Left: Attempt Inspection -->
+              <div class="postmortem-card">
+                <div class="card-heading-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  Attempt Diagnosis & Trap Breakdown
+                </div>
+                <div class="attempt-summary-box">
+                  <div class="summary-row">
+                    <span class="summary-label">Target Section:</span>
+                    <span class="summary-val" id="postSummarySection">Quant (QA)</span>
+                  </div>
+                  <div class="summary-row">
+                    <span class="summary-label">Pace & Time Spent:</span>
+                    <span class="summary-val" id="postSummaryTime">2m 42s (Slower than 60s benchmark)</span>
+                  </div>
+                  <div class="summary-row">
+                    <span class="summary-label">Your Answer:</span>
+                    <span class="summary-val" id="postSummaryUserAns" style="color: var(--accent-crimson);">Option A (Off-by-one arithmetic)</span>
+                  </div>
+                  <div class="summary-row">
+                    <span class="summary-label">Verified Correct:</span>
+                    <span class="summary-val" id="postSummaryCorrectAns" style="color: var(--accent-emerald);">Option B (Shortcut substitution)</span>
+                  </div>
+                </div>
+
+                <div class="error-tag-alert" id="postSummaryExplanationBox">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                  <div id="postSummaryExplanationText">
+                    <strong>Algorithmic Triage Flag:</strong> You expanded a simultaneous variable system instead of noticing the 2^x substitution shortcut, losing 110 seconds of mock time.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right: Learner Self-Attribution -->
+              <div class="postmortem-card">
+                <div class="card-heading-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                  Classify Your Decision Flaw
+                </div>
+                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">
+                  What actually tripped you up? Selecting the cognitive cause calibrates your custom drill:
+                </p>
+
+                <div class="attribution-options-list" id="attributionList">
+                  <!-- Dynamically populated options -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Footer Action -->
+            <div class="screen-action-footer">
+              <button class="btn-secondary" onclick="navigateToScreen(2)">← Recheck Diagnostic</button>
+              <span style="font-size: 11px; color: var(--text-muted);">Calibrating Readiness signals with empirical task data</span>
+              <button class="btn-primary" onclick="proceedToReadiness()">Update Readiness Signals →</button>
+            </div>
+          </section>
+
+          <!-- ================================================================
+               SCREEN 4: MERIDIAN READINESS SIGNALS & DASHBOARD
+               ================================================================ -->
+          <section class="screen" id="screen4">
+            <div class="screen-header-block">
+              <span class="case-badge-pill highlight">Section 07 Blueprint • Transparent Readiness Signals</span>
+              <h1 class="screen-headline">CAT Readiness Signals</h1>
+              <p class="screen-subtext">Explainable readiness metrics based strictly on observed timed actions—not arbitrary AI guesses.</p>
+            </div>
+
+            <div class="readiness-overview-grid">
+              <!-- Composite Index Card -->
+              <div class="composite-score-card">
+                <div>
+                  <div class="index-title">Meridian Study Readiness Index</div>
+                  <div class="big-score-display">
+                    <span class="score-num" id="compositeScoreNum">68</span>
+                    <span class="score-max">/100</span>
+                  </div>
+                  <div class="evidence-badge" id="evidenceBadge">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
+                    <span>3 Timed Tasks Observed</span>
+                  </div>
+                </div>
+
+                <div class="score-disclaimer-pill">
+                  <strong>Ethical Guardrail:</strong> Diagnostic readiness signal only. Does NOT claim to predict official CAT percentile or admission probabilities.
+                </div>
+              </div>
+
+              <!-- 4 Core Signals Subgrid -->
+              <div class="signals-subgrid">
+                <!-- VARC Signal -->
+                <div class="signal-card">
+                  <div class="signal-header">
+                    <span class="signal-title">VARC Readiness</span>
+                    <span class="confidence-tag med" id="confVarc">Med Conf</span>
+                  </div>
+                  <div class="signal-meter-bar">
+                    <div class="meter-fill varc" style="width: 64%;"></div>
+                  </div>
+                  <div class="signal-status-desc" id="descVarc">
+                    64% • Moderate distractor discrimination; struggles with subtle absolute modifiers.
+                  </div>
+                </div>
+
+                <!-- DILR Signal -->
+                <div class="signal-card">
+                  <div class="signal-header">
+                    <span class="signal-title">DILR Execution</span>
+                    <span class="confidence-tag high" id="confDilr">High Conf</span>
+                  </div>
+                  <div class="signal-meter-bar">
+                    <div class="meter-fill dilr" style="width: 58%;"></div>
+                  </div>
+                  <div class="signal-status-desc" id="descDilr">
+                    58% • High solo accuracy, but 2-minute set triage shows delayed abandonment risk.
+                  </div>
+                </div>
+
+                <!-- QA Signal -->
+                <div class="signal-card">
+                  <div class="signal-header">
+                    <span class="signal-title">QA Timed Transfer</span>
+                    <span class="confidence-tag high" id="confQa">High Conf</span>
+                  </div>
+                  <div class="signal-meter-bar">
+                    <div class="meter-fill qa" style="width: 72%;"></div>
+                  </div>
+                  <div class="signal-status-desc" id="descQa">
+                    72% • High algebra fluency; tendency to brute force before shortcut triage.
+                  </div>
+                </div>
+
+                <!-- Strategy & Execution Signal -->
+                <div class="signal-card">
+                  <div class="signal-header">
+                    <span class="signal-title">Execution Discipline</span>
+                    <span class="confidence-tag med" id="confExec">Med Conf</span>
+                  </div>
+                  <div class="signal-meter-bar">
+                    <div class="meter-fill exec" style="width: 78%;"></div>
+                  </div>
+                  <div class="signal-status-desc" id="descExec">
+                    78% • Time allocation discipline on track; 1 clock panic instance flagged.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Explainability & Why This Drill Card -->
+            <div class="explainability-card">
+              <div class="explain-header">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                Why this drill was selected for your next study session:
+              </div>
+              <p class="explain-text" id="recommendationRationaleText">
+                Based on your error post-mortem, you lost 2.5 minutes using algebraic substitution on an alligation question. We have queued a <strong>10-minute Question Triage & Shortcut Identification drill</strong> to build automatic recognition of 45-second high-yield questions before tomorrow's sectional mock.
+              </p>
+            </div>
+
+            <!-- Footer Action -->
+            <div class="screen-action-footer">
+              <button class="btn-secondary" onclick="navigateToScreen(3)">← Review Post-Mortem</button>
+              <span style="font-size: 11px; color: var(--text-muted);">Singular next action • < 15 minute commitment</span>
+              <button class="btn-primary" onclick="navigateToScreen(5)">
+                Launch Next Best Drill (10 min) →
+              </button>
+            </div>
+          </section>
+
+          <!-- ================================================================
+               SCREEN 5: NEXT BEST DRILL (ACTION LOOP)
+               ================================================================ -->
+          <section class="screen" id="screen5">
+            <div class="screen-header-block">
+              <span class="case-badge-pill highlight">Section 09 Core Loop • Next Best Drill</span>
+              <h1 class="screen-headline">Targeted Action Drill</h1>
+              <p class="screen-subtext">One specific cognitive flaw. One lesson. One targeted re-attempt. Completed in under 15 minutes.</p>
+            </div>
+
+            <div class="drill-container">
+              <!-- Drill Header Card -->
+              <div class="drill-hero-card">
+                <div class="drill-meta-badge-row">
+                  <span class="drill-time-badge" id="drillTimeBadge">⏱️ 10 mins</span>
+                  <span class="case-badge-pill" id="drillSectionBadge">QA • Question Triage</span>
+                </div>
+                <h2 class="drill-title" id="drillTitle">Question Triage & Time-Sink Identification</h2>
+                <p class="drill-objective" id="drillObjective">
+                  Differentiate between 45-second high-yield questions and 3-minute algebra traps under mock pressure.
+                </p>
+              </div>
+
+              <!-- Micro Concept Lesson -->
+              <div class="concept-lesson-card">
+                <h4 class="lesson-heading" id="lessonHeading">The 20-Second Triage Rule</h4>
+                <p class="lesson-body" id="lessonBody">
+                  If your solving path requires more than 3 lines of fraction arithmetic, pause. Ask: Can this be solved via Alligation, Option Back-Substitution, or Unit Digit properties? If not, and you are under clock pressure, mark for Round 2.
+                </p>
+              </div>
+
+              <!-- Reattempt Micro-Exercise -->
+              <div class="drill-exercise-card">
+                <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">
+                  Targeted Micro-Exercise:
+                </div>
+                <p style="font-size: 14px; font-weight: 600; color: var(--text-main); line-height: 1.4; margin-bottom: 14px;" id="drillExerciseStem">
+                  A question asks for the integer solution to an exponential equation with options: A) 22, B) 19, C) 15, D) 31. Your first step should be:
+                </p>
+
+                <div class="options-list" id="drillExerciseOptions">
+                  <!-- Injected via JS -->
+                </div>
+
+                <div class="drill-feedback-box" id="drillFeedbackBox">
+                  <!-- Feedback on choice -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Footer Action -->
+            <div class="screen-action-footer">
+              <button class="btn-secondary" onclick="navigateToScreen(4)">← Back to Signals</button>
+              <button class="btn-primary" id="btnCompleteDrill" onclick="completeDrill()">
+                Complete Drill & Log Progress →
+              </button>
+            </div>
+          </section>
+
+          <!-- ================================================================
+               SCREEN 6: LEARNER IDENTITY, PROGRESS & PRIVACY
+               ================================================================ -->
+          <section class="screen" id="screen6">
+            <div class="screen-header-block">
+              <span class="case-badge-pill highlight">Section 08 Identity & Feasibility Gate</span>
+              <h1 class="screen-headline">Meridian Learner Profile & History</h1>
+              <p class="screen-subtext">Private learner identity, session continuity, and ethical privacy controls.</p>
+            </div>
+
+            <div class="identity-grid">
+              <!-- Digital Learner ID Card -->
+              <div class="learner-id-card">
+                <div class="id-card-top">
+                  <span class="meridian-seal">MERIDIAN ID</span>
+                  <div class="id-chip"></div>
+                </div>
+                <div class="id-card-middle">
+                  <div class="learner-name" id="idCardName">Harshit Verma</div>
+                  <div class="learner-target" id="idCardTarget">CAT 2026 • Target: IIM A/B/C</div>
+                  <div class="id-account-num" id="idCardAccountNum">MER-CAT-2026-8841</div>
+                </div>
+                <div class="id-card-bottom">
+                  <span>Continuous Private Progress</span>
+                  <span style="color: #4ade80;">● Active Session</span>
+                </div>
+              </div>
+
+              <!-- History & Timeline -->
+              <div class="history-section-card">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                  <h3 style="font-size: 15px; font-weight: 700; color: var(--text-main);">Recent Diagnostic & Drill History</h3>
+                  <span style="font-size: 12px; color: var(--text-muted);">Last 30 Days</span>
+                </div>
+
+                <div class="timeline-list" id="timelineList">
+                  <div class="timeline-item">
+                    <div class="timeline-icon">✓</div>
+                    <div class="timeline-details">
+                      <div class="timeline-title">Question Triage & Time-Sink Drill Completed</div>
+                      <div class="timeline-sub">Today • 10 mins • Accuracy: 100% (+4 Readiness pts)</div>
+                    </div>
+                  </div>
+                  <div class="timeline-item">
+                    <div class="timeline-icon">⚡</div>
+                    <div class="timeline-details">
+                      <div class="timeline-title">QA Timed Transfer Diagnostic Attempted</div>
+                      <div class="timeline-sub">Today • 5 mins • Error Tag: Brute Force Linear Algebra</div>
+                    </div>
+                  </div>
+                  <div class="timeline-item">
+                    <div class="timeline-icon">📋</div>
+                    <div class="timeline-details">
+                      <div class="timeline-title">Initial Profile Calibration</div>
+                      <div class="timeline-sub">Baseline recorded from CL Mock 04 scores</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Privacy Controls Center -->
+            <div class="privacy-controls-box">
+              <div class="privacy-info">
+                <div class="privacy-title">Data Minimisation & Account Sovereignty</div>
+                <p class="privacy-desc">
+                  Under the Meridian Data Charter, we never ask for phone numbers, caste, religion, or bank records. You maintain full ownership of your error logs and can export or wipe your history at any time.
+                </p>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <button class="btn-secondary" onclick="exportDataJSON()" style="font-size: 12px;">Export Data (JSON)</button>
+                <button class="btn-secondary" onclick="clearAttemptHistory()" style="font-size: 12px; color: var(--accent-crimson);">Clear History</button>
+              </div>
+            </div>
+
+            <!-- Web3 Credential Feasibility Sandbox (Case Section 08 Gate) -->
+            <div class="web3-card">
+              <div class="web3-header">
+                <div class="web3-title">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  Web3 / Verifiable Credentials Feasibility Gate (Case Section 08)
+                </div>
+                <span class="web3-status-pill">Executive Decision: Deferred from MVP</span>
+              </div>
+              <p class="web3-body">
+                <strong>Why blockchain / NFTs are not in launch MVP:</strong> Learner discovery interviews (R-01 to R-04) showed students care about fixing their timed mock score gap, not acquiring NFTs. A wallet requirement introduces friction with zero CAT benefit. Verifiable credentials (W3C standard) are preserved as an opt-in study milestone for post-MBA recruitment, not a gating requirement.
+              </p>
+            </div>
+
+            <!-- Footer Action -->
+            <div class="screen-action-footer">
+              <button class="btn-secondary" onclick="navigateToScreen(5)">← Back to Drill</button>
+              <button class="btn-primary" onclick="navigateToScreen(1)">
+                Start Another Diagnostic Loop ↻
+              </button>
+            </div>
+          </section>
+
+        </div> <!-- /screen-container -->
+
+      </div> <!-- /app-core-shell -->
+    </div> <!-- /desktopAppContainer -->
+
+    <!-- MOBILE SIMULATOR PHONE MOCKUP (Used when Phone Mode is active) -->
+    <div class="phone-mockup-wrapper" id="phoneSimulatorWrapper">
+      <div class="phone-outer-shell">
+        <div class="phone-inner-screen">
+
+          <!-- Phone Status Bar -->
+          <div class="phone-status-bar">
+            <span class="status-time" id="phoneLiveClock">14:04</span>
+            <div class="dynamic-island" title="Interactive Dynamic Island" onclick="toggleDynamicIslandExpand()">
+              <div class="island-camera-dot"></div>
+              <div class="island-live-indicator">
+                <div class="island-pulse-dot"></div>
+                <span id="islandStatusText">CAT Prep</span>
+              </div>
+            </div>
+            <div class="status-icons">
+              <span>5G</span>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L12 22l7.03-4.39C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9zm0 15c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/></svg>
+            </div>
+          </div>
+
+          <!-- Phone Scrollable App Container (Content moves here in phone mode) -->
+          <div class="phone-scroll-content" id="phoneAppScrollArea">
+            <!-- App Content will be placed here in phone mode -->
+          </div>
+
+          <!-- Phone Home Indicator Bar -->
+          <div class="phone-home-indicator-bar">
+            <div class="home-indicator-pill"></div>
+          </div>
+
+        </div> <!-- /phone-inner-screen -->
+      </div> <!-- /phone-outer-shell -->
+    </div> <!-- /phone-mockup-wrapper -->
+
+  </main>
+
+  <!-- ==========================================================================
+       CASE & STAKEHOLDER EVIDENCE DRAWER (Competition Evaluator Tool)
+       ========================================================================== -->
+  <aside class="case-guide-drawer" id="caseGuideDrawer">
+    <div class="drawer-header">
+      <div class="drawer-title">Ace the Case 2026 • Evidence Crosswalk</div>
+      <button class="drawer-close-btn" onclick="toggleCaseDrawer()">&times;</button>
+    </div>
+    <div class="drawer-scroll-body">
+      <h4 style="font-weight: 700; margin-bottom: 6px;">Case Grounding & Traceability</h4>
+      <p style="font-size: 12px; color: #64748b; margin-bottom: 12px;">
+        Every screen in this prototype maps directly to the evidence register and executive decisions from the workbook:
+      </p>
+
+      <table class="audit-table">
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Workbook Item</th>
+            <th>Prototype Screen</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Q-04</strong></td>
+            <td>Quant timed gap (solves coaching material untimed, but 4 correct in mocks)</td>
+            <td>Screen 1 & 2 (QA Sprint)</td>
+          </tr>
+          <tr>
+            <td><strong>Q-01</strong></td>
+            <td>DILR set selection speed (12-20 marks in mocks)</td>
+            <td>Screen 2 (DILR Triage)</td>
+          </tr>
+          <tr>
+            <td><strong>Q-02/03</strong></td>
+            <td>VARC distractor trap (9-12 marks despite reading articles)</td>
+            <td>Screen 2 & 5 (RC Diagnostic & Elimination Drill)</td>
+          </tr>
+          <tr>
+            <td><strong>R-03</strong></td>
+            <td>All 10 interviewees reacted positively to personalization concept</td>
+            <td>Screen 1 (Progressive Intake)</td>
+          </tr>
+          <tr>
+            <td><strong>Sec 08</strong></td>
+            <td>Executive Decision: Defer NFTs/blockchain from MVP</td>
+            <td>Screen 6 (Identity & Privacy Center)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4 style="font-weight: 700; margin: 18px 0 6px;">Competitor Moat Comparison</h4>
+      <table class="audit-table">
+        <thead>
+          <tr>
+            <th>Provider</th>
+            <th>Limitation Observed</th>
+            <th>Meridian Edge</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>IMS SimCAT</strong></td>
+            <td>High-level percentiles; lacks 5-minute causal post-mortem</td>
+            <td>Direct error-to-drill loop in <5 mins</td>
+          </tr>
+          <tr>
+            <td><strong>CL CDC</strong></td>
+            <td>Extensive reports cause analysis paralysis</td>
+            <td>Singular "Next Best Drill" (10-15m)</td>
+          </tr>
+          <tr>
+            <td><strong>Cracku</strong></td>
+            <td>Topic error log (e.g. "Algebra") misses cognitive cause</td>
+            <td>Attribution taxonomy (Triage vs Calculation Panic)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4 style="font-weight: 700; margin: 18px 0 6px;">Zero-Budget GTM (30 Days to CAT)</h4>
+      <p style="font-size: 12px; color: #475569; line-height: 1.45;">
+        • <strong>Strategy A:</strong> Reddit CAT communities (value-first mock error guides, no spam).<br>
+        • <strong>Strategy B:</strong> Campus peer workshops in Delhi NCR (15-min practice-mock gap clinics).<br>
+        • <strong>Strategy C:</strong> Product-led shareable 5-minute diagnostic utility.
+      </p>
+    </div>
+  </aside>
+
+  <!-- Load Data and Main Application Engine -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
